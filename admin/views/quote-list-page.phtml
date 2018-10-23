@@ -1,7 +1,13 @@
+<?php
+    use \MaratMSBootcampPlugin\Tools\WpUrlGenerator;
+
+    // Vars need to be delivered:
+    /* @var \MaratMSBootcampPlugin\Entity\Quote[] $quoteList */
+?>
 <div class="bootcamp wrap">
     <div class="bootcamp__wrapper">
-        <h1 class="wp-heading-inline">Quote list</h1>
-        <a href="#"
+        <h1 class="wp-heading-inline">Bootcamp: Quote list</h1>
+        <a href="<?= WpUrlGenerator::getQuoteEditPageUrl(0); ?>"
            class="page-title-action">Add New</a>
 
         <hr class="wp-header-end" />
@@ -16,19 +22,24 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>James Bond</td>
-                    <td>My name is James Bond</td>
-                    <td>
-                        <a href="#"><span class="dashicons dashicons-edit"></span>Edit</a>
-                        &nbsp;
-                        <a href="#"
-                           onclick="return confirm('Are you sure you want to delete this quote?');">
-                            <span class="dashicons dashicons-no-alt"></span>Delete
-                        </a>
-                    </td>
-                </tr>
+                <?php foreach($quoteList as $key => $quote): ?>
+                    <tr>
+                        <td><?= $key + 1; ?></td>
+                        <td><?= htmlspecialchars($quote->getAuthorName()); ?></td>
+                        <td><?= htmlspecialchars($quote->getText()); ?></td>
+                        <td>
+                            <a href="<?= WpUrlGenerator::getQuoteEditPageUrl($quote->getId()); ?>">
+                                <span class="dashicons dashicons-edit"></span>Edit
+                            </a>
+                            &nbsp;
+                            <a href="<?= WpUrlGenerator::getDeleteQuoteActionUrl($quote->getId()); ?>"
+                               onclick="return confirm('Are you sure you want to delete this quote?');">
+                                <span class="dashicons dashicons-no-alt"></span>Delete
+                            </a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+
             </tbody>
 
         </table>

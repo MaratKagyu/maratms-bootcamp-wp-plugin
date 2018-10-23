@@ -1,20 +1,68 @@
+<?php
+    use \MaratMSBootcampPlugin\Tools\WpUrlGenerator;
+
+    // Vars need to be delivered:
+    /* @var \MaratMSBootcampPlugin\Entity\Quote $quote */
+?>
 <div class="bootcamp wrap">
     <div class="bootcamp__wrapper">
-        <h1 class="wp-heading-inline">Edit quote</h1>
+        <h1 class="wp-heading-inline">
+            Bootcamp: <?= $quote->getid() ? "Edit quote" : "Add a quote" ?>
+        </h1>
         <hr class="wp-header-end" />
 
-        <table class="widefat fixed">
-            <tbody>
-                <tr>
-                    <td>
-                        <label for="authorName">Author:</label>
-                    </td>
-                    <td>
-                        <input name="authorName" id="authorName" type="text"/>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <form class="stuffbox" action="<?= WpUrlGenerator::getSaveQuoteActionUrl($quote->getId()); ?>" method="post">
+            <div class="inside">
+                <fieldset>
+                    <table class="form-table editcomment">
+                        <tbody>
+                            <tr>
+                                <td class="bootcamp__label-cell">
+                                    <label for="authorName">Author:</label>
+                                </td>
+                                <td>
+                                    <input
+                                        name="authorName"
+                                        id="authorName"
+                                        type="text"
+                                        class="bootcamp__wide-input"
+                                        value="<?= htmlspecialchars($quote->getAuthorName()); ?>"
+                                        required="required"
+                                        maxlength="255"
+                                    />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="bootcamp__label-cell">
+                                    <label for="quoteText">Text:</label>
+                                </td>
+                                <td>
+                                    <textarea
+                                        name="quoteText"
+                                        id="quoteText"
+                                        class="bootcamp__wide-input"
+                                        required="required"
+                                        maxlength="2000"
+                                        type="text"><?= htmlspecialchars($quote->getText()); ?></textarea>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </fieldset>
+                <p class="bootcamp__buttons-block">
+                    <button class="button-primary">Save</button>
+                    &nbsp;
+                    <a class="button-secondary"
+                       href="<?= WpUrlGenerator::getQuoteListPageUrl(); ?>">Cancel</a>
+
+                </p>
+            </div>
+
+        </form>
+
+
     </div>
 </div>
 

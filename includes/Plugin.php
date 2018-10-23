@@ -2,7 +2,7 @@
 
 namespace MaratMSBootcampPlugin;
 
-use MaratMSBootcampPlugin\Tools\Template;
+use MaratMSBootcampPlugin\Tools\WpUrlGenerator;
 
 class Plugin
 {
@@ -56,11 +56,12 @@ class Plugin
     /**
      *
      */
-    public function register()
+    public function init()
     {
         $this->addAdminScripts();
+        $this->registerAdminRoutes();
+
         $this->addClientScripts();
-        $this->addAdminMenu();
     }
 
     /**
@@ -117,20 +118,53 @@ class Plugin
     /**
      *
      */
-    private function addAdminMenu()
+    private function registerAdminRoutes()
     {
+        // Quote list page
         add_action('admin_menu', function () {
             add_menu_page(
                 'Bootcamp quotes',
                 'Bootcamp',
                 'manage_options',
-                'maratms-bootcamp',
+                WpUrlGenerator::PAGE_QUOTE_LIST_SLUG,
                 function () {
                     print($this->getAdminController()->renderQuoteListPage());
                 },
                 "",
                 5
             );
+        });
+
+        // Quote edit page
+        add_action('admin_menu', function () {
+            add_submenu_page(
+                null,
+                "Edit quote",
+                null,
+                "manage_options",
+                WpUrlGenerator::PAGE_QUOTE_EDIT_SLUG,
+                function () {
+                    $quoteId = isset($_GET['quoteId']) ? $_GET['quoteId'] : 0;
+                    print($this->getAdminController()->renderQuoteEditPage($quoteId));
+                }
+            );
+        });
+
+        // Quote save action
+        add_action('admin_action_' . WpUrlGenerator::ACTION_QUOTE_SAVE_SLUG, function () {
+            $quoteId = isset($_GET['quoteId']) ? $_GET['quoteId'] : 0;
+            $authorName = isset($_POST['authorName']) ? $_POST['authorName'] : "";
+            $quoteText = isset($_POST['quoteText']) ? $_POST['quoteText'] : "";
+            $this
+                ->getAdminController()
+                ->saveQuoteAction($quoteId, $authorName, $quoteText)
+            ;
+        });
+
+        // Quote delete action
+        add_action('admin_action_' . WpUrlGenerator::ACTION_QUOTE_DELETE_SLUG, function () {
+            $quoteId = isset($_GET['quoteId']) ? $_GET['quoteId'] : 0;
+            $this->getAdminController()->deleteQuoteAction($quoteId);
         });
     }
 
@@ -139,6 +173,6 @@ class Plugin
      */
     private function getAdminController()
     {
-        return new AdminController($this->pluginRoot, $this->backendUrl);
+        return new AdminController($this->pluginRoot, $this->backendUrl, "");
     }
 }

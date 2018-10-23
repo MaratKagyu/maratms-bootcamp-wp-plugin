@@ -25,7 +25,7 @@ require_once (__DIR__ . "/autoload.php");
 
 
 $mbpPlugin = new Plugin(__DIR__ . "/");
-$mbpPlugin->register();
+$mbpPlugin->init();
 
 
 register_activation_hook(__FILE__, [$mbpPlugin, 'activate']);

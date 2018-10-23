@@ -1,6 +1,6 @@
 <?php
 
-// Enables class auto-loading for MaratMSBootcampPlugin namespace
+// Enables class auto-loading for MaratMSBootcampPlugin namespace (root = ./includes)
 
 spl_autoload_register(function ($class) {
     if (preg_match('#^MaratMSBootcampPlugin\\\\(.*)#', $class, $pregResult)) {

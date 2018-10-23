@@ -5,3 +5,17 @@
 .bootcamp .bootcamp__wrapper {
     padding: 10px;
 }
+
+.bootcamp__label-cell {
+    width: 200px;
+}
+
+.bootcamp__wide-input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.bootcamp__buttons-block {
+    text-align: center;
+}
+
