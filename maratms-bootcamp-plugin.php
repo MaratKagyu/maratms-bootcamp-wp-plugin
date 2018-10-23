@@ -21,13 +21,13 @@ if ( !function_exists( 'add_action' ) ) {
     die('Hi there!  I\'m just a plugin, not much I can do when called directly.');
 }
 
-define( 'MARATMS_BP__PLUGIN_DIR', __DIR__ . "/" );
 require_once (__DIR__ . "/autoload.php");
 
 
-$mbpPlugin = new Plugin();
+$mbpPlugin = new Plugin(__DIR__ . "/");
+$mbpPlugin->register();
 
 
 register_activation_hook(__FILE__, [$mbpPlugin, 'activate']);
 register_deactivation_hook(__FILE__, [$mbpPlugin, 'deactivate']);
-register_uninstall_hook(__FILE__, [$mbpPlugin, 'uninstall']);
+// register_uninstall_hook(__FILE__, [$mbpPlugin, 'uninstall']);

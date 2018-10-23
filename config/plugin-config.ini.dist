@@ -1,0 +1,2 @@
+; This config file can be rewritten by plugin-config.ini
+backend_url='http://maratms-bootcamp-backend.ws72.loc.maratms.com/'
