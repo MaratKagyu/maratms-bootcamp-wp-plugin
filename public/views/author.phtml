@@ -1,0 +1,15 @@
+<?php
+
+    // quoteList
+/* @var \MaratMSBootcampPlugin\Entity\Quote[] $quoteList */
+?>
+
+<div class="bootcamp-quotes">
+    <?php foreach($quoteList as $quote): ?>
+        <p>
+            <i><?= htmlspecialchars($quote->getAuthorName()); ?></i>:
+            <?= htmlspecialchars($quote->getText()); ?>
+        </p>
+    <?php endforeach; ?>
+</div>
+

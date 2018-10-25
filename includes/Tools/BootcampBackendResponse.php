@@ -83,7 +83,7 @@ class BootcampBackendResponse
     /**
      * @return array
      */
-    public function getResponseJson()
+    public function getResponseArray()
     {
         return json_decode($this->response, true);
     }

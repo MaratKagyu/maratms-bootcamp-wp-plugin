@@ -55,4 +55,14 @@ class WpUrlGenerator
         $quoteId = (int)$quoteId;
         return admin_url('admin.php') . "?action=" . self::ACTION_QUOTE_DELETE_SLUG . "&quoteId=" . $quoteId;
     }
+
+    /**
+     * @param int $authorId
+     * @return string
+     */
+    public static function getAuthorPageUrl($authorId)
+    {
+        $authorId = (int)$authorId;
+        return home_url('/bootcamp/') . "?authorId=" . $authorId;
+    }
 }

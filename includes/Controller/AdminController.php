@@ -6,7 +6,7 @@
  * Time: 9:06 PM
  */
 
-namespace MaratMSBootcampPlugin;
+namespace MaratMSBootcampPlugin\Controller;
 
 use MaratMSBootcampPlugin\Entity\Quote;
 use MaratMSBootcampPlugin\Tools\BootcampBackend;
@@ -63,7 +63,6 @@ class AdminController
         );
     }
 
-
     /**
      * @param int $quoteId
      * @return string
@@ -100,6 +99,7 @@ class AdminController
      */
     public function saveQuoteAction($quoteId, $authorName, $quoteText)
     {
+        // TODO: Handle field lengths errors
         $backend = new BootcampBackend($this->backendUrl, $this->backendToken);
         $backend->saveQuote($quoteId, $authorName, $quoteText);
 

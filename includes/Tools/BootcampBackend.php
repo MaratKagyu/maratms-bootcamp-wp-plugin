@@ -9,6 +9,7 @@
 namespace MaratMSBootcampPlugin\Tools;
 
 use MaratMSBootcampPlugin\Entity\Quote;
+use MaratMSBootcampPlugin\Exception\BootcampException;
 
 class BootcampBackend
 {
@@ -74,6 +75,7 @@ class BootcampBackend
         }
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // curl_setopt($ch, CURLOPT_TIMEOUT, 10); // max timeout 10 sec
         $rawResult = curl_exec($ch);
         $httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
@@ -118,13 +120,30 @@ class BootcampBackend
      */
     public function loadQuoteList()
     {
-        $quoteListData = $this->makeGetRequest('/quotes', ["token" => $this->backendToken])->getResponseJson();
+        $quoteListData = $this->makeGetRequest('/quotes', ["token" => $this->backendToken])->getResponseArray();
         return array_map(
             function ($quoteData) {
                 return Quote::constructFromArray($quoteData);
             },
             $quoteListData
         );
+    }
+
+    /**
+     * @return void
+     * @throws BootcampException
+     */
+    public function register()
+    {
+        $quoteResponse = $this->makePostRequest(
+            '/register',
+            [],
+            ["token" => $this->backendToken]
+        );
+
+        if (! $quoteResponse->isSuccessful()) {
+            throw new BootcampException("Couldn't register the app!");
+        }
     }
 
     /**
@@ -138,9 +157,46 @@ class BootcampBackend
             ["token" => $this->backendToken]
         );
 
+        return $quoteResponse->isSuccessful()
+            ?  Quote::constructFromArray($quoteResponse->getResponseArray())
+            : null
+        ;
+    }
+
+    /**
+     * @param int $authorId
+     * @return Quote[]
+     */
+    public function loadAuthorQuotes($authorId)
+    {
+        $quoteResponse = $this->makeGetRequest(
+            '/quotes/by_author/' . (int)$authorId,
+            ["token" => $this->backendToken]
+        );
 
         return $quoteResponse->isSuccessful()
-            ?  Quote::constructFromArray($quoteResponse->getResponseJson())
+            ?  array_map(
+                function ($quoteData) {
+                    return Quote::constructFromArray($quoteData);
+                },
+                $quoteResponse->getResponseArray()
+            )
+            : []
+        ;
+    }
+
+    /**
+     * @return Quote|null
+     */
+    public function loadRandomQuote()
+    {
+        $quoteResponse = $this->makeGetRequest(
+            '/quotes/random',
+            ["token" => $this->backendToken]
+        );
+
+        return $quoteResponse->isSuccessful()
+            ?  Quote::constructFromArray($quoteResponse->getResponseArray())
             : null
         ;
     }
@@ -161,7 +217,7 @@ class BootcampBackend
                 "authorName" => $authorName,
                 "text" => $quoteText,
             ]
-        )->getResponseJson();
+        )->getResponseArray();
 
         return Quote::constructFromArray($quoteData);
     }

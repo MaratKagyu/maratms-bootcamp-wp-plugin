@@ -1,0 +1,12 @@
+<?php
+use \MaratMSBootcampPlugin\Tools\WpUrlGenerator;
+
+// Vars need to be delivered:
+/* @var \MaratMSBootcampPlugin\Entity\Quote $quote */
+?>
+<div class="bootcamp-widget">
+    <a href="<?= WpUrlGenerator::getAuthorPageUrl($quote->getAuthorId()); ?>">
+        <?= htmlspecialchars($quote->getAuthorName()); ?>
+    </a>:
+    <?= htmlspecialchars($quote->getText()) ?>
+</div>
