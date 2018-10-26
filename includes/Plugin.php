@@ -224,8 +224,8 @@ class Plugin
         // Quote save action
         add_action('admin_action_' . WpUrlGenerator::ACTION_QUOTE_SAVE_SLUG, function () {
             $quoteId = isset($_GET['quoteId']) ? $_GET['quoteId'] : 0;
-            $authorName = isset($_POST['authorName']) ? $_POST['authorName'] : "";
-            $quoteText = isset($_POST['quoteText']) ? $_POST['quoteText'] : "";
+            $authorName = isset($_POST['authorName']) ? stripslashes($_POST['authorName']) : "";
+            $quoteText = isset($_POST['quoteText']) ? stripslashes($_POST['quoteText']) : "";
             $this
                 ->getAdminController()
                 ->saveQuoteAction($quoteId, $authorName, $quoteText);
